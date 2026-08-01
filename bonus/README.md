@@ -27,3 +27,7 @@ A Streamlit web app that predicts a country's safe drinking water access rate ba
 
 2. Run the app:
    streamlit run Home.py
+
+## Deployed Web App
+
+URL: https://dtp-ddw-zc-grp9.streamlit.app/
