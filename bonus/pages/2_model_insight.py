@@ -11,17 +11,15 @@ st.title("Model Insights")
 st.subheader("Performance")
 
 col1, col2, col3 = st.columns(3)
-col1.metric("Adjusted R²", "0.6601", delta="+0.2516")  # 0.6601 - 0.4085
-col2.metric("RMSE", "15.87", delta="-5.06")  # 20.93 - 15.87
+col1.metric("Adjusted R²", "0.6601", delta="+0.2516")
+col2.metric("RMSE", "15.87", delta="-5.06")
 col3.metric("Countries", "133")
 
 # feature impact - UPDATED coefficients for log(GDP) model
 st.subheader("Feature Impact")
 
-# These coefficients should come from your log(GDP) model
-# You need to extract these from your notebook's output
 features = ["Rural Population", "Gov Health Exp", "log(GDP)"]
-importance = [-10.10, 8.93, 8.78]  # From your model output
+importance = [-10.10, 8.93, 8.78]
 colors = ["#ff6b6b", "#ffd93d", "#4d96ff"]
 
 fig, ax = plt.subplots(figsize=(8, 3))
