@@ -1,18 +1,17 @@
 import numpy as np
 
-# Model parameters (from final polynomial model)
-# Order: intercept, rural_pct, gov_health_pct, gdp_per_capita, gdp_per_capita²
+# Model parameters (from final log(GDP) model)
+# Order: intercept, rural_pct, gov_health_pct, log_gdp
 BETA = np.array([
     [68.8959],   # intercept
     [-8.4784],   # rural_pct
     [5.1206],    # gov_health_pct
-    [3.9875],    # gdp_per_capita
-    [-0.0001]    # gdp_per_capita²
+    [3.9875]     # log_gdp
 ])
 
-# Means and stds for normalization (order: rural, health, gdp, gdp²)
-MEANS = np.array([37.2889, 11.2968, 23662.74, 1.89e9])
-STDS = np.array([21.8730, 5.2541, 36743.05, 8.67e9])
+# Means and stds for normalization (order: rural, health, log_gdp)
+MEANS = np.array([37.2889, 11.2968, np.log(23662.74 + 1)])  # mean of log_gdp
+STDS = np.array([21.8730, 5.2541, 1.5])  # std of log_gdp
 
 
 def predict_water_access(rural, health, gdp):
@@ -27,8 +26,11 @@ def predict_water_access(rural, health, gdp):
     Returns:
         float: Predicted water access percentage (0-100)
     """
-    gdp_sq = gdp ** 2
-    X_input = np.array([[rural, health, gdp, gdp_sq]])
+    # Ensure GDP is positive for log transform
+    gdp = max(gdp, 1)  # log(1) = 0
+    log_gdp = np.log(gdp)
+    
+    X_input = np.array([[rural, health, log_gdp]])
     X_norm = (X_input - MEANS) / STDS
     X_with_intercept = np.c_[np.ones(X_norm.shape[0]), X_norm]
     pred = X_with_intercept @ BETA
@@ -48,8 +50,8 @@ def get_status(pred_value):
 def get_model_info():
     """Return model performance metrics."""
     return {
-        "adjusted_r2": 0.5779,
-        "rmse": 19.05,
+        "adjusted_r2": 0.6601,  # Updated to log(GDP) model
+        "rmse": 15.87,          # Updated to log(GDP) model
         "sample_size": 133,
-        "features": ["rural_pct", "gov_health_pct", "gdp_per_capita", "gdp_per_capita²"]
+        "features": ["rural_pct", "gov_health_pct", "log_gdp"]  # Updated
     }

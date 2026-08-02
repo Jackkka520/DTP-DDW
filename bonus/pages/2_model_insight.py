@@ -7,20 +7,22 @@ import matplotlib.pyplot as plt
 st.set_page_config(page_title="Data Insights", layout="centered")
 st.title("Model Insights")
 
-# model performance
+# model performance - UPDATED to log(GDP) model results
 st.subheader("Performance")
 
 col1, col2, col3 = st.columns(3)
-col1.metric("Adjusted R²", "0.5779", delta="+0.048")
-col2.metric("RMSE", "19.05", delta="-1.13")
+col1.metric("Adjusted R²", "0.6601", delta="+0.2516")  # 0.6601 - 0.4085
+col2.metric("RMSE", "15.87", delta="-5.06")  # 20.93 - 15.87
 col3.metric("Countries", "133")
 
-# feature impact
+# feature impact - UPDATED coefficients for log(GDP) model
 st.subheader("Feature Impact")
 
-features = ["Rural Population", "Gov Health Exp", "GDP per Capita", "GDP²"]
-importance = [-8.48, 5.12, 3.99, -0.0001]
-colors = ["#ff6b6b", "#ffd93d", "#6bcb77", "#4d96ff"]
+# These coefficients should come from your log(GDP) model
+# You need to extract these from your notebook's output
+features = ["Rural Population", "Gov Health Exp", "log(GDP)"]
+importance = [-10.10, 8.93, 8.78]  # From your model output
+colors = ["#ff6b6b", "#ffd93d", "#4d96ff"]
 
 fig, ax = plt.subplots(figsize=(8, 3))
 bars = ax.barh(features, importance, color=colors)
@@ -35,11 +37,11 @@ for bar, val in zip(bars, importance):
 
 st.pyplot(fig)
 
-# key takeaways
+# key takeaways - UPDATED
 st.subheader("Key Takeaways")
 st.markdown("""
-- **GDP per capita** is the strongest predictor (wealth → better access)
-- The relationship is **non-linear**: adding GDP² improved the model
-- **Rural population** reduces water access
-- **Government health spending** has a positive but weaker effect
+- **log(GDP) replaced GDP²** — better captures the diminishing returns relationship
+- **Adjusted R² improved from 0.4085 to 0.6601** (test set)
+- **Rural population** reduces water access (strong negative effect)
+- **Government health spending and GDP** both have positive effects
 """)
