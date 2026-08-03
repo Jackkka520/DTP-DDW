@@ -28,6 +28,8 @@ with col1:
         step=1000,
         help="World Bank data (current US$)"
     )
+
+with col2:
     rural = st.slider(
         "Rural Population (%)",
         min_value=0.0,
@@ -36,20 +38,11 @@ with col1:
         step=0.5
     )
 
-with col2:
-    health = st.number_input(
-        "Gov Health Expenditure (% of GDP)",
-        min_value=0.0,
-        max_value=30.0,
-        value=5.0,
-        step=0.1
-    )
-
 st.markdown("---")
 
 # Prediction
 if st.button("Predict", type="primary"):
-    pred_value = predict_water_access(rural, health, gdp)
+    pred_value = predict_water_access(rural, gdp)  # Remove health parameter
     pred_value = max(0, min(100, pred_value))
 
     status, color = get_status(pred_value)
@@ -58,7 +51,6 @@ if st.button("Predict", type="primary"):
     st.session_state.history.append({
         "GDP": gdp,
         "Rural %": rural,
-        "Health %": health,
         "Predicted %": round(pred_value, 1),
         "Status": status
     })
@@ -76,7 +68,7 @@ if st.button("Predict", type="primary"):
             unsafe_allow_html=True
         )
 
-    st.caption(f"GDP: ${gdp:,} | Rural: {rural:.1f}% | Health: {health:.1f}%")
+    st.caption(f"GDP: ${gdp:,} | Rural: {rural:.1f}%")
 
 st.markdown("---")
 

@@ -7,20 +7,20 @@ import matplotlib.pyplot as plt
 st.set_page_config(page_title="Data Insights", layout="centered")
 st.title("Model Insights")
 
-# model performance - UPDATED to log(GDP) model results
+# model performance
 st.subheader("Performance")
 
 col1, col2, col3 = st.columns(3)
-col1.metric("Adjusted R²", "0.6601", delta="+0.2516")
-col2.metric("RMSE", "15.87", delta="-5.06")
+col1.metric("Adjusted R²", "0.6768", delta="+0.2683")
+col2.metric("RMSE", "15.80", delta="-5.13")
 col3.metric("Countries", "133")
 
-# feature impact - UPDATED coefficients for log(GDP) model
+# feature impact
 st.subheader("Feature Impact")
 
-features = ["Rural Population", "Gov Health Exp", "log(GDP)"]
-importance = [-10.10, 8.93, 8.78]
-colors = ["#ff6b6b", "#ffd93d", "#4d96ff"]
+features = ["Rural Population", "log(GDP)"]
+importance = [-3.31, 23.28]
+colors = ["#ff6b6b", "#4d96ff"]
 
 fig, ax = plt.subplots(figsize=(8, 3))
 bars = ax.barh(features, importance, color=colors)
@@ -35,11 +35,10 @@ for bar, val in zip(bars, importance):
 
 st.pyplot(fig)
 
-# key takeaways - UPDATED
+# key takeaways
 st.subheader("Key Takeaways")
 st.markdown("""
-- **log(GDP) replaced GDP²** — better captures the diminishing returns relationship
-- **Adjusted R² improved from 0.4085 to 0.6601** (test set)
-- **Rural population** reduces water access (strong negative effect)
-- **Government health spending and GDP** both have positive effects
+- **log(GDP)** is the strongest predictor (diminishing returns)
+- **Rural population** reduces water access
+- **Final model explains ~68% of variance** (Adjusted R² = 0.6768)
 """)
